@@ -1,0 +1,61 @@
+{
+  "source": "hand-written",
+  "name": "moon-phases",
+  "description": "Reference composed experience: why the Moon has phases.",
+  "spec": {
+    "mode": "composed",
+    "parts": [
+      { "id": "sun", "type": "lightSource", "label": "Sun", "position": [14, 0, 0], "intensity": 3, "color": "#fff4d6", "radius": 2.2 },
+      { "id": "earth", "type": "sphere", "label": "Earth", "position": [0, 0, 0], "radius": 1, "color": "#2b6cb0", "axialTiltDeg": 23.44 },
+      { "id": "moon", "type": "sphere", "label": "Moon", "position": [3, 0, 0], "radius": 0.27, "color": "#cfcfcf", "showPhase": true },
+      { "id": "moonOrbit", "type": "orbitPath", "label": "Moon's orbit", "center": [0, 0, 0], "radius": 3, "color": "#5a6b8c" },
+      { "id": "sunlightArrow", "type": "arrow", "label": "Sunlight direction", "origin": [3, 0, -4.2], "angleDeg": 180, "length": 2.4, "color": "#ffd76e" },
+      { "id": "labelSun", "type": "label", "position": [14, 2.8, 0], "text": "Sun" },
+      { "id": "labelEarth", "type": "label", "position": [0, 1.5, 0], "text": "Earth" },
+      { "id": "labelMoon", "type": "label", "position": [3, 0.7, 0], "text": "Moon", "opacity": 0.9 }
+    ],
+    "variables": [
+      {
+        "id": "orbitAngle",
+        "label": "Moon's position in its orbit",
+        "min": 0,
+        "max": 360,
+        "step": 1,
+        "default": 45,
+        "unit": "°",
+        "description": "Drag the Moon around Earth. 0° is between Earth and the Sun (new moon); 180° is opposite the Sun (full moon).",
+        "bindings": [
+          { "target": "moon.position.x", "op": "cosDeg", "param": 3 },
+          { "target": "moon.position.z", "op": "sinDeg", "param": 3 },
+          { "target": "labelMoon.position.x", "op": "cosDeg", "param": 3 },
+          { "target": "labelMoon.position.z", "op": "sinDeg", "param": 3 }
+        ]
+      }
+    ],
+    "readouts": [
+      {
+        "id": "elongation",
+        "label": "Sun-Moon elongation",
+        "formula": "moonElongation",
+        "inputs": { "orbitAngle": "$orbitAngle" }
+      },
+      {
+        "id": "litFraction",
+        "label": "Illuminated fraction",
+        "formula": "illuminatedFraction",
+        "inputs": { "elongation": "$elongation" }
+      }
+    ],
+    "content": {
+      "title": "Why the Moon has phases",
+      "explanation": "The Moon does not make its own light. Half of it is always lit by the Sun. As the Moon orbits Earth, we see that lit half from different angles: the lit part we can see grows from new moon to full moon and shrinks back again.",
+      "tryThis": [
+        "Drag the orbit slider to the far side of Earth, opposite the Sun. Which half of the Moon is lit, and can you see it from Earth?",
+        "Set the slider halfway. About half the Moon appears lit - that is a quarter moon. Read the illuminated fraction.",
+        "Test the idea that Earth's shadow causes phases: watch the Moon pass behind Earth at full moon. Does its lit fraction change on this orbit, far from the shadow?",
+        "Find the slider position where the illuminated fraction is 0. Where is the Moon relative to the Sun?"
+      ],
+      "keyIdea": "Phases come from seeing different parts of the Moon's always-lit half as it orbits Earth - not from Earth's shadow."
+    }
+  }
+}

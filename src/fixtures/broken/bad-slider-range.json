@@ -1,0 +1,25 @@
+{
+  "name": "bad-slider-range",
+  "description": "A slider whose min is not below its max.",
+  "spec": {
+    "mode": "composed",
+    "parts": [
+      { "id": "earth", "type": "sphere", "position": [0, 0, 0], "radius": 1, "color": "#2b6cb0" }
+    ],
+    "variables": [
+      {
+        "id": "orbitAngle",
+        "label": "Orbit angle",
+        "min": 360,
+        "max": 0,
+        "step": 1,
+        "default": 45,
+        "unit": "°",
+        "bindings": []
+      }
+    ],
+    "readouts": [],
+    "content": { "title": "t", "explanation": "e", "tryThis": ["x"], "keyIdea": "k" }
+  },
+  "expectErrorContains": "must be less than max"
+}

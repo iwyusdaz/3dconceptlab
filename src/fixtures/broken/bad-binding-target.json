@@ -1,0 +1,25 @@
+{
+  "name": "bad-binding-target",
+  "description": "A binding that points to a part that does not exist.",
+  "spec": {
+    "mode": "composed",
+    "parts": [
+      { "id": "earth", "type": "sphere", "position": [0, 0, 0], "radius": 1, "color": "#2b6cb0" }
+    ],
+    "variables": [
+      {
+        "id": "spin",
+        "label": "Spin",
+        "min": 0,
+        "max": 360,
+        "step": 1,
+        "default": 0,
+        "unit": "°",
+        "bindings": [{ "target": "moon.position.x", "op": "set" }]
+      }
+    ],
+    "readouts": [],
+    "content": { "title": "t", "explanation": "e", "tryThis": ["x"], "keyIdea": "k" }
+  },
+  "expectErrorContains": "does not exist"
+}

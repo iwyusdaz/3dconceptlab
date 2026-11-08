@@ -1,0 +1,14 @@
+{
+  "name": "unknown-template",
+  "description": "A template spec naming a template that is not in the registry.",
+  "spec": {
+    "mode": "template",
+    "templateId": "tectonics",
+    "variables": [
+      { "id": "dayOfYear", "label": "Day", "min": 1, "max": 365, "step": 1, "default": 100, "unit": "day", "bindings": [] }
+    ],
+    "readouts": [],
+    "content": { "title": "t", "explanation": "e", "tryThis": ["x"], "keyIdea": "k" }
+  },
+  "expectErrorContains": "unknown template"
+}

@@ -1,0 +1,32 @@
+{
+  "source": "hand-written",
+  "name": "seasons",
+  "description": "Reference template experience: why Earth has seasons.",
+  "spec": {
+    "mode": "template",
+    "templateId": "seasons",
+    "variables": [
+      { "id": "dayOfYear", "label": "Position in orbit (day of year)", "min": 1, "max": 365, "step": 1, "default": 172, "unit": "day", "bindings": [] },
+      { "id": "tilt", "label": "Earth's axial tilt", "min": 0, "max": 45, "step": 0.5, "default": 23.44, "unit": "°", "bindings": [] },
+      { "id": "latitude", "label": "Observer latitude", "min": -90, "max": 90, "step": 0.5, "default": 51.5, "unit": "°", "bindings": [] }
+    ],
+    "readouts": [
+      { "id": "declination", "label": "Sun's declination", "formula": "solarDeclination", "inputs": { "dayOfYear": "$dayOfYear", "tilt": "$tilt" } },
+      { "id": "noonAltitude", "label": "Noon sun altitude", "formula": "noonSunAltitude", "inputs": { "latitude": "$latitude", "declination": "$declination" } },
+      { "id": "beamSpread", "label": "Beam spread (vs overhead sun)", "formula": "beamSpread", "inputs": { "altitude": "$noonAltitude" } },
+      { "id": "daylight", "label": "Daylight hours (geometric)", "formula": "daylightHours", "inputs": { "latitude": "$latitude", "declination": "$declination" } },
+      { "id": "distance", "label": "Earth-Sun distance", "formula": "earthSunDistance", "inputs": { "dayOfYear": "$dayOfYear" } }
+    ],
+    "content": {
+      "title": "Why Earth has seasons",
+      "explanation": "Earth's axis is tilted 23.44°. As Earth orbits the Sun, each hemisphere leans toward the Sun for part of the year (summer: higher sun, longer days) and away for another part (winter: low sun, short days). Distance from the Sun barely matters - Earth is actually closest to the Sun in January, during the northern winter.",
+      "tryThis": [
+        "Scrub through the orbit and watch the daylight hours for your latitude. When are they longest?",
+        "Set the tilt to 0°. What happens to the seasons and the daylight hours?",
+        "Compare noon sun altitude in June and December at your latitude, and check the beam spread: the same sunlight covers more ground when the Sun is low.",
+        "Watch the Earth-Sun distance across the year. Is Earth closest to the Sun in the northern summer or winter? Does distance explain seasons?"
+      ],
+      "keyIdea": "Seasons are caused by Earth's tilted axis changing the sun angle and day length, not by Earth's distance from the Sun."
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "bad-formula",
+  "description": "A readout using a formula that is not in the library.",
+  "spec": {
+    "mode": "composed",
+    "parts": [
+      { "id": "earth", "type": "sphere", "position": [0, 0, 0], "radius": 1, "color": "#2b6cb0" }
+    ],
+    "variables": [],
+    "readouts": [
+      { "id": "gravity", "label": "Surface gravity", "formula": "surfaceGravity", "inputs": { "radius": 1 } }
+    ],
+    "content": { "title": "t", "explanation": "e", "tryThis": ["x"], "keyIdea": "k" }
+  },
+  "expectErrorContains": "unknown formula"
+}

@@ -1,0 +1,25 @@
+{
+  "name": "bad-binding-property",
+  "description": "A binding to a property that exists in the target syntax but is not bindable for the part type.",
+  "spec": {
+    "mode": "composed",
+    "parts": [
+      { "id": "earth", "type": "sphere", "position": [0, 0, 0], "radius": 1, "color": "#2b6cb0" }
+    ],
+    "variables": [
+      {
+        "id": "wobble",
+        "label": "Wobble",
+        "min": 0,
+        "max": 10,
+        "step": 1,
+        "default": 5,
+        "unit": "x",
+        "bindings": [{ "target": "earth.intensity", "op": "set" }]
+      }
+    ],
+    "readouts": [],
+    "content": { "title": "t", "explanation": "e", "tryThis": ["x"], "keyIdea": "k" }
+  },
+  "expectErrorContains": "not a bindable property"
+}

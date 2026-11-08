@@ -1,0 +1,14 @@
+{
+  "name": "too-many-parts",
+  "description": "More parts than the scene part cap (40).",
+  "spec": {
+    "mode": "composed",
+    "parts": [
+      { "id": "sun", "type": "lightSource", "position": [10, 0, 0], "intensity": 2, "color": "#fff" }
+    ],
+    "variables": [],
+    "readouts": [],
+    "content": { "title": "t", "explanation": "e", "tryThis": ["x"], "keyIdea": "k" }
+  },
+  "expectErrorContains": "parts"
+}

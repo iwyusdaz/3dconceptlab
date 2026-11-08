@@ -1,0 +1,15 @@
+{
+  "name": "unknown-part-type",
+  "description": "A part type outside the whitelist.",
+  "spec": {
+    "mode": "composed",
+    "parts": [
+      { "id": "sun", "type": "lightSource", "position": [10, 0, 0], "intensity": 2, "color": "#fff" },
+      { "id": "blackhole", "type": "blackHole", "position": [0, 0, 0], "radius": 2, "color": "#000" }
+    ],
+    "variables": [],
+    "readouts": [],
+    "content": { "title": "t", "explanation": "e", "tryThis": ["x"], "keyIdea": "k" }
+  },
+  "expectErrorContains": "Invalid discriminator"
+}
