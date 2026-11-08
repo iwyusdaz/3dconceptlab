@@ -32,6 +32,8 @@ test("seasons template: badges and ground view are present", async ({ page }) =>
   await page.goto("/preview/template/seasons");
   await expect(page.getByTestId("badge-not-to-scale")).toHaveText("Not to scale");
   await expect(page.getByTestId("badge-time-lapse")).toHaveText("Time-lapse");
-  await expect(page.getByTestId("viewer-scene").locator("canvas")).toBeVisible();
+  // Main scene canvas (the inset panel adds a second canvas).
+  await expect(page.getByTestId("viewer-scene").locator("canvas").first()).toBeVisible();
+  await expect(page.getByTestId("scene-inset").locator("canvas")).toBeVisible();
   await expect(page.getByTestId("readout-distance")).toBeVisible();
 });

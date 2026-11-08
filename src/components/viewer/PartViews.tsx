@@ -14,6 +14,8 @@ import { readOverride, type PartOverrides } from "@/lib/viewer/evaluate";
 export interface PartViewProps {
   part: ScenePart;
   overrides: Map<string, number>;
+  /** Object labels render only while the scene is hovered or focused. */
+  labelsVisible?: boolean;
 }
 
 function baseNumber(part: ScenePart, key: string): number | undefined {
@@ -133,10 +135,11 @@ function ArrowPartView({ part, overrides }: PartViewProps) {
   );
 }
 
-function LabelPartView({ part, overrides }: PartViewProps) {
+function LabelPartView({ part, overrides, labelsVisible = true }: PartViewProps) {
   const p = part as Extract<ScenePart, { type: "label" }>;
   const position = vec3(part, overrides, "position", [0, 0, 0]);
   const opacity = num("opacity", part, overrides, p.opacity ?? 1);
+  if (!labelsVisible) return null;
   return (
     <Text
       position={position}
@@ -163,7 +166,7 @@ function GroundPatchView({ part }: PartViewProps) {
 
 export const PART_COMPONENTS: Record<
   ScenePart["type"],
-  (props: PartViewProps) => React.ReactElement
+  (props: PartViewProps) => React.ReactElement | null
 > = {
   sphere: SpherePartView,
   lightSource: LightSourcePartView,

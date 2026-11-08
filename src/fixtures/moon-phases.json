@@ -5,12 +5,12 @@
   "spec": {
     "mode": "composed",
     "parts": [
-      { "id": "sun", "type": "lightSource", "label": "Sun", "position": [14, 0, 0], "intensity": 3, "color": "#fff4d6", "radius": 2.2 },
+      { "id": "sun", "type": "lightSource", "label": "Sun", "position": [12, 0, 0], "intensity": 3, "color": "#fff4d6", "radius": 1.6 },
       { "id": "earth", "type": "sphere", "label": "Earth", "position": [0, 0, 0], "radius": 1, "color": "#2b6cb0", "axialTiltDeg": 23.44 },
       { "id": "moon", "type": "sphere", "label": "Moon", "position": [3, 0, 0], "radius": 0.27, "color": "#cfcfcf", "showPhase": true },
       { "id": "moonOrbit", "type": "orbitPath", "label": "Moon's orbit", "center": [0, 0, 0], "radius": 3, "color": "#5a6b8c" },
-      { "id": "sunlightArrow", "type": "arrow", "label": "Sunlight direction", "origin": [3, 0, -4.2], "angleDeg": 180, "length": 2.4, "color": "#ffd76e" },
-      { "id": "labelSun", "type": "label", "position": [14, 2.8, 0], "text": "Sun" },
+      { "id": "sunlightArrow", "type": "arrow", "label": "Sunlight direction", "origin": [7.5, 0, 0], "angleDeg": 180, "length": 2.2, "color": "#ffd76e" },
+      { "id": "labelSun", "type": "label", "position": [12, 2.4, 0], "text": "Sun" },
       { "id": "labelEarth", "type": "label", "position": [0, 1.5, 0], "text": "Earth" },
       { "id": "labelMoon", "type": "label", "position": [3, 0.7, 0], "text": "Moon", "opacity": 0.9 }
     ],

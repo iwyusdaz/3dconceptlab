@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useState, createElement } from "react";
-import { Canvas } from "@react-three/fiber";
+import { useEffect, useMemo, useRef, useState, createElement } from "react";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import type { SceneSpec, Variable } from "@/lib/spec/schema";
 import { evaluateBindings, type VariableValues } from "@/lib/viewer/evaluate";
@@ -53,6 +53,10 @@ export function ExperienceViewer({ spec, initialValues, ariaLabel }: ExperienceV
   const overrides = useMemo(() => evaluateBindings(spec, values), [spec, values]);
   const readoutResults = useMemo(() => evaluateReadouts(spec, values), [spec, values]);
 
+  // Object labels appear only while the scene is hovered or focused (Task 9
+  // polish); a text alternative below the scene covers screen readers.
+  const [labelsVisible, setLabelsVisible] = useState(false);
+
   return (
     <div className="viewer">
       <div
@@ -60,20 +64,33 @@ export function ExperienceViewer({ spec, initialValues, ariaLabel }: ExperienceV
         data-testid="viewer-scene"
         data-hydrated={hydrated ? "true" : "false"}
         data-overrides={JSON.stringify(Object.fromEntries(overrides))}
+        tabIndex={0}
+        role="img"
+        aria-label={ariaLabel ?? "Interactive 3D scene. Use the sliders below to explore."}
+        onPointerEnter={() => setLabelsVisible(true)}
+        onPointerLeave={() => setLabelsVisible(false)}
+        onFocus={() => setLabelsVisible(true)}
+        onBlur={() => setLabelsVisible(false)}
       >
         <Canvas
           dpr={[1, 2]}
           camera={{ position: [0, 6, 16], fov: 45 }}
-          aria-label={ariaLabel ?? "Interactive 3D scene"}
+          aria-hidden="true"
           style={{ width: "100%", height: "100%" }}
         >
           <ambientLight intensity={0.25} />
+          <FrameRateMeter />
           {spec.mode === "composed" ? (
             spec.parts.map((part) => (
-              <PartView key={part.id} part={part} overrides={overrides} />
+              <PartView
+                key={part.id}
+                part={part}
+                overrides={overrides}
+                labelsVisible={labelsVisible}
+              />
             ))
           ) : (
-            <TemplateSceneById templateId={spec.templateId} values={values} />
+            <TemplateSceneById templateId={spec.templateId} values={values} labelsVisible={labelsVisible} />
           )}
           <OrbitControls makeDefault enablePan={false} minDistance={4} maxDistance={60} />
         </Canvas>
@@ -90,6 +107,21 @@ export function ExperienceViewer({ spec, initialValues, ariaLabel }: ExperienceV
             </span>
           )}
         </div>
+
+        {/* Template inset panel (picture-in-picture, e.g. the city ground
+            view): always visible, never overlaps the main scene. */}
+        {spec.mode === "template" && <TemplateInset templateId={spec.templateId} values={values} />}
+      </div>
+      <p className="sr-only scene-text-alt">
+        Text alternative: the 3D scene shows the objects described in the explanation
+        below. Every scene interaction also exists as a labelled slider in the controls
+        section, and the live readouts report the values as text.
+      </p>
+
+      <div className="viewer-toolbar" aria-hidden="false">
+        <span className="badge" data-testid="fps-meter" aria-label="Frame rate">
+          — fps
+        </span>
       </div>
 
       <section className="control-bar" aria-label="Controls">
@@ -140,12 +172,14 @@ export function ExperienceViewer({ spec, initialValues, ariaLabel }: ExperienceV
 function TemplateSceneById({
   templateId,
   values,
+  labelsVisible,
 }: {
   templateId: string;
   values: VariableValues;
+  labelsVisible: boolean;
 }) {
-  const scene = getTemplateScene(templateId);
-  if (!scene) {
+  const entry = getTemplateScene(templateId);
+  if (!entry) {
     return (
       <mesh>
         <sphereGeometry args={[1, 16, 16]} />
@@ -154,7 +188,43 @@ function TemplateSceneById({
     );
   }
   // The scene component comes from a stable registry, not created in render.
-  return createElement(scene, { values });
+  return createElement(entry.scene, { values, labelsVisible });
+}
+
+/** Optional template inset panel (DOM overlay with its own small canvas). */
+function TemplateInset({ templateId, values }: { templateId: string; values: VariableValues }) {
+  const entry = getTemplateScene(templateId);
+  if (!entry?.inset) return null;
+  return (
+    <div
+      className="scene-inset"
+      role="img"
+      aria-label="Detail view: the Sun's noon altitude and the spread of the sunlight patch"
+      data-testid="scene-inset"
+    >
+      {createElement(entry.inset, { values })}
+    </div>
+  );
+}
+
+/** In-app frame-rate meter (Task 9: checked against the 30 fps target). */
+function FrameRateMeter() {
+  const fps = useRef({ frames: 0, last: 0, value: 0 });
+  const { gl } = useThree();
+  useFrame((_, delta) => {
+    void gl;
+    const s = fps.current;
+    s.frames += 1;
+    s.last += delta;
+    if (s.last >= 0.5) {
+      s.value = Math.round(s.frames / s.last);
+      s.frames = 0;
+      s.last = 0;
+      const el = document.querySelector<HTMLElement>('[data-testid="fps-meter"]');
+      if (el) el.textContent = `${s.value} fps`;
+    }
+  });
+  return null;
 }
 
 interface SliderControlProps {
