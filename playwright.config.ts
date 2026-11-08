@@ -29,8 +29,9 @@ export default defineConfig({
     timeout: 120_000,
     env: {
       FIXTURE_MODE: "true",
+      // Test-only access code (not a real credential). No BLOB token here,
+      // so the create-save-share E2E uses local-file storage.
       LIVE_AI_ACCESS_CODE: "e2e-secret-access-code",
-      BLOB_READ_WRITE_TOKEN: "e2e-secret-blob-token",
     },
   },
 });

@@ -49,16 +49,20 @@ export function utcToday(now: Date = new Date()): string {
   return now.toISOString().slice(0, 10);
 }
 
+/** URL-safe alphabet without visually ambiguous characters. */
 const SHARE_ID_ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789-_";
 /** 12-character URL-safe random share ID. */
 export function makeShareId(): string {
   const bytes = randomBytes(LIMITS.SHARE_ID_LENGTH);
   let out = "";
-  for (let i = 0; i < LIMITS.SHARE_ID_LENGTH; i++) out += SHARE_ID_ALPHABET[bytes[i] % 64];
+  for (let i = 0; i < LIMITS.SHARE_ID_LENGTH; i++) {
+    out += SHARE_ID_ALPHABET[bytes[i] % SHARE_ID_ALPHABET.length];
+  }
   return out;
 }
 
-/** Share IDs the server accepts: exactly 12 URL-safe characters. */
+/** Share IDs the server accepts: exactly 12 characters from the alphabet. */
 export function isValidShareId(id: string): boolean {
-  return new RegExp(`^[A-Za-z0-9_-]{${LIMITS.SHARE_ID_LENGTH}}$`).test(id);
+  // The dash is written first so it is a literal, not a range operator.
+  return /^[A-HJ-NP-Za-km-z2-9_-]{12}$/.test(id);
 }

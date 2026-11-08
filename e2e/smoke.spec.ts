@@ -20,6 +20,7 @@ test("home page loads with hero, canvas and mode badge", async ({ page }) => {
 test("secrets passed via env never appear in the page", async ({ page }) => {
   await page.goto("/");
   const html = await page.content();
-  expect(html).not.toContain("e2e-secret-blob-token");
+  // The test access code is a secret-shaped value fed through the webServer
+  // env; it must never leak into the page HTML.
   expect(html).not.toContain("e2e-secret-access-code");
 });
