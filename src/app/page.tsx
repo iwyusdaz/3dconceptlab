@@ -10,8 +10,9 @@ export default function Home() {
           Type a concept. Get an interactive 3D learning experience your students can explore.
         </p>
         <p className="tagline-sub">
-          Built for concepts that words and static diagrams can&apos;t show — like why seasons
-          happen or why the Moon has phases.
+          Some concepts depend on spatial or moving relationships — why seasons happen, why
+          the Moon has phases. Words and static diagrams struggle with those. ConceptLab
+          turns them into 3D scenes students can scrub, tilt and explore.
         </p>
         <div className="hero-actions">
           <Link href="/demo" className="button primary">
@@ -21,8 +22,13 @@ export default function Home() {
             Create an experience
           </Link>
         </div>
+        <div className="demo-placeholder" role="img" aria-label="Demo video placeholder">
+          [ Demo video / GIF coming here ]
+        </div>
         <p className="hero-note">
-          Standards-aligned with NGSS MS-ESS1-1: lunar phases, eclipses and seasons.
+          Standards-aligned with NGSS MS-ESS1-1: develop and use a model of the
+          Earth–Sun–Moon system to describe cyclic patterns of lunar phases, eclipses and
+          seasons.
         </p>
       </section>
       <section className="hero-scene" aria-label="Decorative 3D preview of a lit sphere">
