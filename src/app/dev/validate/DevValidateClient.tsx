@@ -2,6 +2,8 @@
 
 import { useMemo, useState } from "react";
 import { validateSpec } from "@/lib/spec/validate";
+import { FORMULA_LIBRARY } from "@/lib/formulas/registry";
+import { samples, type FormulaSample } from "@/lib/formulas";
 import { getServerStatus } from "@/config/app-config";
 
 /**
@@ -39,6 +41,8 @@ export function DevValidateClient() {
       return { ok: false, errors: [`JSON parse error: ${(e as Error).message}`] } as const;
     }
   }, [text]);
+
+  const samplesList: FormulaSample[] = useMemo(() => samples(), []);
 
   if (!enabled) {
     return <p>This tool is only available in development.</p>;
@@ -80,6 +84,36 @@ export function DevValidateClient() {
           )}
         </section>
       )}
+
+      <section style={{ marginTop: "2rem" }}>
+        <h2>Formula library samples</h2>
+        <p>Sample outputs from the implemented formulas:</p>
+        <table style={{ borderCollapse: "collapse", width: "100%" }}>
+          <thead>
+            <tr>
+              <th style={{ textAlign: "left", padding: "0.3rem" }}>Formula</th>
+              <th style={{ textAlign: "left", padding: "0.3rem" }}>Example inputs</th>
+              <th style={{ textAlign: "left", padding: "0.3rem" }}>Result</th>
+            </tr>
+          </thead>
+          <tbody>
+            {samplesList.map((s) => (
+              <tr key={s.formula}>
+                <td style={{ padding: "0.3rem", fontFamily: "monospace" }}>{s.formula}</td>
+                <td style={{ padding: "0.3rem", fontFamily: "monospace" }}>
+                  ({s.inputsText})
+                </td>
+                <td style={{ padding: "0.3rem" }}>
+                  {s.value} {s.unit}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <p style={{ color: "#9aa6c3", fontSize: "0.85rem" }}>
+          {FORMULA_LIBRARY.length} formulas in the library.
+        </p>
+      </section>
     </main>
   );
 }
