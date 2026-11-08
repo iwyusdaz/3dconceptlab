@@ -1,0 +1,40 @@
+# dependencies
+/node_modules
+
+# next.js
+/.next/
+/out/
+next-env.d.ts
+
+# production
+/build
+
+# environment files — never commit these
+.env*.local
+.env
+
+# local development data (local-file storage)
+/.data/
+
+# vercel
+.vercel
+
+# misc
+.DS_Store
+*.pem
+*.tsbuildinfo
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# testing
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+
+# editors
+.idea
+.vscode
