@@ -12,6 +12,8 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+      // The real package throws in the test (client-like) environment.
+      "server-only": path.resolve(__dirname, "./src/test-stubs/server-only.ts"),
     },
   },
 });
