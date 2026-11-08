@@ -36,9 +36,19 @@ export function ExperienceViewer({ spec, initialValues, ariaLabel }: ExperienceV
   }, [spec, initialValues]);
 
   const [values, setValues] = useState<VariableValues>(defaults);
-  // E2E tests wait for this: range fills before hydration hit no listener.
+  // E2E tests wait for this marker: range fills before hydration hit no
+  // React listener. Set via a one-shot microtask after mount instead of a
+  // synchronous setState-in-effect.
   const [hydrated, setHydrated] = useState(false);
-  useEffect(() => setHydrated(true), []);
+  useEffect(() => {
+    let cancelled = false;
+    queueMicrotask(() => {
+      if (!cancelled) setHydrated(true);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const overrides = useMemo(() => evaluateBindings(spec, values), [spec, values]);
   const readoutResults = useMemo(() => evaluateReadouts(spec, values), [spec, values]);
