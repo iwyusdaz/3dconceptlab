@@ -80,6 +80,10 @@ export const ContentSchema = z.object({
   explanation: shortText,
   tryThis: z.array(shortText).min(1).max(6),
   keyIdea: shortText,
+  /** Renders a "Not to scale" badge when true (accuracy over spectacle). */
+  notToScale: z.boolean().optional(),
+  /** Renders a "Time-lapse" badge when the scene shows sped-up motion. */
+  timeLapse: z.boolean().optional(),
 });
 
 const PartBase = {
@@ -136,6 +140,7 @@ export const LabelPartSchema = z.object({
   position: vector3,
   text: z.string().min(1).max(120),
   color: z.string().max(40).optional(),
+  opacity: z.number().finite().min(0).max(1).optional(),
 });
 
 export const GroundPatchPartSchema = z.object({

@@ -55,7 +55,9 @@
         "Test the idea that Earth's shadow causes phases: watch the Moon pass behind Earth at full moon. Does its lit fraction change on this orbit, far from the shadow?",
         "Find the slider position where the illuminated fraction is 0. Where is the Moon relative to the Sun?"
       ],
-      "keyIdea": "Phases come from seeing different parts of the Moon's always-lit half as it orbits Earth - not from Earth's shadow."
+      "keyIdea": "Phases come from seeing different parts of the Moon's always-lit half as it orbits Earth - not from Earth's shadow.",
+      "notToScale": true,
+      "timeLapse": true
     }
   }
 }
