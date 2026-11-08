@@ -26,7 +26,9 @@
         "Compare noon sun altitude in June and December at your latitude, and check the beam spread: the same sunlight covers more ground when the Sun is low.",
         "Watch the Earth-Sun distance across the year. Is Earth closest to the Sun in the northern summer or winter? Does distance explain seasons?"
       ],
-      "keyIdea": "Seasons are caused by Earth's tilted axis changing the sun angle and day length, not by Earth's distance from the Sun."
+      "keyIdea": "Seasons are caused by Earth's tilted axis changing the sun angle and day length, not by Earth's distance from the Sun.",
+      "notToScale": true,
+      "timeLapse": true
     }
   }
 }

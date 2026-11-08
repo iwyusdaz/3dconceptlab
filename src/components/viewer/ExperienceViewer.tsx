@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, createElement } from "react";
+import { useEffect, useMemo, useState, createElement } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import type { SceneSpec, Variable } from "@/lib/spec/schema";
@@ -36,6 +36,9 @@ export function ExperienceViewer({ spec, initialValues, ariaLabel }: ExperienceV
   }, [spec, initialValues]);
 
   const [values, setValues] = useState<VariableValues>(defaults);
+  // E2E tests wait for this: range fills before hydration hit no listener.
+  const [hydrated, setHydrated] = useState(false);
+  useEffect(() => setHydrated(true), []);
 
   const overrides = useMemo(() => evaluateBindings(spec, values), [spec, values]);
   const readoutResults = useMemo(() => evaluateReadouts(spec, values), [spec, values]);
@@ -45,6 +48,7 @@ export function ExperienceViewer({ spec, initialValues, ariaLabel }: ExperienceV
       <div
         className="viewer-scene"
         data-testid="viewer-scene"
+        data-hydrated={hydrated ? "true" : "false"}
         data-overrides={JSON.stringify(Object.fromEntries(overrides))}
       >
         <Canvas
