@@ -63,6 +63,7 @@ const DEFAULT_COLORS: Record<ScenePart["type"], string> = {
   arrow: "#ffd76e",
   label: "#dfe6f5",
   groundPatch: "#2e4d3a",
+  shadowCone: "#0b0e14",
 };
 
 function partColor(p: ScenePart): string {
@@ -178,6 +179,38 @@ function GroundPatchView({ part }: PartViewProps) {
   );
 }
 
+function ShadowConePartView({ part, overrides }: PartViewProps) {
+  const p = part as Extract<ScenePart, { type: "shadowCone" }>;
+  const origin = vec3(part, overrides, "origin", [0, 0, 0]);
+  const angleDeg = num("angleDeg", part, overrides, p.angleDeg);
+  const length = num("length", part, overrides, p.length);
+  const apexAngleDeg = num("apexAngleDeg", part, overrides, p.apexAngleDeg);
+  const opacity = num("opacity", part, overrides, p.opacity ?? 0.45);
+  const dir: [number, number, number] = [Math.cos(angleDeg * D2R), 0, Math.sin(angleDeg * D2R)];
+  const baseRadius = Math.tan((apexAngleDeg / 2) * D2R) * length;
+  // coneGeometry's apex points +Y; align +Y with the cast direction via a
+  // quaternion so the apex lands at origin + dir·length.
+  const quaternion = new THREE.Quaternion().setFromUnitVectors(
+    new THREE.Vector3(0, 1, 0),
+    new THREE.Vector3(dir[0], 0, dir[2]).normalize(),
+  );
+  return (
+    <mesh
+      position={[origin[0] + dir[0] * length * 0.5, origin[1], origin[2] + dir[2] * length * 0.5]}
+      quaternion={quaternion}
+    >
+      <coneGeometry args={[baseRadius, length, 24, 1, true]} />
+      <meshBasicMaterial
+        color={partColor(p)}
+        transparent={opacity < 1}
+        opacity={opacity}
+        side={THREE.DoubleSide}
+        depthWrite={false}
+      />
+    </mesh>
+  );
+}
+
 export const PART_COMPONENTS: Record<
   ScenePart["type"],
   (props: PartViewProps) => React.ReactElement | null
@@ -188,6 +221,7 @@ export const PART_COMPONENTS: Record<
   arrow: ArrowPartView,
   label: LabelPartView,
   groundPatch: GroundPatchView,
+  shadowCone: ShadowConePartView,
 };
 
 export function PartView(props: PartViewProps) {

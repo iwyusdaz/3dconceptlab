@@ -69,6 +69,7 @@ export function composeUserPrompt(concept: string): string {
 ${partsCatalogue}
    - sphere: {id, type, position:[x,y,z], radius>0, color, texture? ("earth-blue-marble"), axialTiltDeg?, rotationYDeg?, opacity? (0-1), showPhase? (true renders the Moon so its lit half faces the Sun)}
    - orbitPath: the "center" field is optional (defaults to the origin/Earth); "color" is optional on every part type (defaults are applied) — omit them rather than writing empty values.
+   - shadowCone: {id, type, origin:[x,y,z] (at the casting body), angleDeg (direction in the XZ plane, 0 = +X, i.e. away from a light source at the origin), length>0, apexAngleDeg (0-180, full cone angle), opacity? (0-1)}. Use it for the dark shadow a sphere casts away from the light source.
 2. "variables": 1-10 sliders, each {id, label, min, max, step, default (within [min,max]), unit, description?, bindings}. Each binding: {"target": "<partId>.<property>", "op": one of ${BINDING_OPS.join("|")}, "param": number}. Op meanings: set = slider value; multiply/add = value ×/＋ param; negate = −value; sinDeg/cosDeg = sin(value°)×param / cos(value°)×param (use param as orbit radius for positions).
    Example variable: ${variableExample}
 3. "readouts": 0-10 readouts, each {id, label, formula (from the list below), inputs} where inputs maps the formula's input names to numbers or "$variableId"/"$readoutId" references:

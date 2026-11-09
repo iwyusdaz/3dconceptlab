@@ -27,6 +27,106 @@ describe("validateSpec: valid fixtures pass", () => {
   });
 });
 
+describe("validateSpec: shadowCone part type", () => {
+  const baseSpec = {
+    mode: "composed",
+    parts: [
+      {
+        id: "sun",
+        type: "lightSource",
+        position: [0, 0, 0],
+        intensity: 2,
+      },
+      {
+        id: "moon",
+        type: "sphere",
+        position: [3, 0, 0],
+        radius: 0.4,
+      },
+      {
+        id: "shadow",
+        type: "shadowCone",
+        origin: [3, 0, 0],
+        angleDeg: 0,
+        length: 2,
+        apexAngleDeg: 5,
+        opacity: 0.5,
+      },
+    ],
+    variables: [
+      {
+        id: "orbitAngle",
+        label: "Moon's position",
+        min: 0,
+        max: 360,
+        step: 1,
+        default: 0,
+        unit: "°",
+        bindings: [
+          { target: "moon.position.x", op: "cosDeg", param: 3 },
+          { target: "moon.position.z", op: "sinDeg", param: 3 },
+          { target: "shadow.origin.x", op: "cosDeg", param: 3 },
+          { target: "shadow.origin.z", op: "sinDeg", param: 3 },
+        ],
+      },
+      {
+        id: "coneLength",
+        label: "Shadow length",
+        min: 0.5,
+        max: 5,
+        step: 0.1,
+        default: 2,
+        unit: "units",
+        bindings: [
+          { target: "shadow.length", op: "set" },
+          { target: "shadow.apexAngleDeg", op: "multiply", param: 2 },
+        ],
+      },
+    ],
+    readouts: [],
+    content: {
+      title: "Shadow cone test",
+      explanation: "A shadow cone cast by the Moon.",
+      tryThis: ["Move the Moon around Earth and watch the shadow."],
+      keyIdea: "Shadows point away from the light source.",
+    },
+  };
+
+  it("a composed spec with a shadowCone and bindings to length/apexAngleDeg passes", () => {
+    const result = validateSpec(baseSpec);
+    expect(result.ok).toBe(true);
+  });
+
+  it("binding to a non-bindable shadowCone property fails", () => {
+    const bad = {
+      ...baseSpec,
+      variables: [
+        {
+          ...baseSpec.variables[1],
+          bindings: [{ target: "shadow.radius", op: "set" }],
+        },
+      ],
+    };
+    const result = validateSpec(bad);
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.errors.join("\n")).toContain('"radius" is not a bindable property of shadowCone');
+    }
+  });
+
+  it("apexAngleDeg above 180 fails the schema", () => {
+    const bad = {
+      ...baseSpec,
+      parts: [
+        ...baseSpec.parts.slice(0, 2),
+        { ...baseSpec.parts[2], apexAngleDeg: 200 },
+      ],
+    };
+    const result = validateSpec(bad);
+    expect(result.ok).toBe(false);
+  });
+});
+
 describe("validateSpec: broken fixtures fail with readable errors", () => {
   const brokenFixtures = [
     "unknown-part-type",

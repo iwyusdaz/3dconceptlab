@@ -10,7 +10,7 @@ import { LIMITS } from "@/config/app-config";
  */
 
 /** Whitelisted part types. */
-export const PART_TYPES = ["sphere", "lightSource", "orbitPath", "arrow", "label", "groundPatch"] as const;
+export const PART_TYPES = ["sphere", "lightSource", "orbitPath", "arrow", "label", "groundPatch", "shadowCone"] as const;
 export type PartType = (typeof PART_TYPES)[number];
 
 /** Whitelisted binding operations (the only way a slider affects a part). */
@@ -25,6 +25,7 @@ export const BINDABLE_PROPERTIES: Record<PartType, string[]> = {
   arrow: ["origin.x", "origin.y", "origin.z", "angleDeg", "length", "opacity"],
   label: ["position.x", "position.y", "position.z", "opacity"],
   groundPatch: ["position.x", "position.y", "position.z", "radius"],
+  shadowCone: ["origin.x", "origin.y", "origin.z", "angleDeg", "length", "apexAngleDeg", "opacity"],
 };
 
 const slug = z
@@ -47,7 +48,7 @@ export const BindingSchema = z.object({
   target: z
     .string()
     .regex(
-      /^[a-zA-Z][a-zA-Z0-9]{0,39}\.(position\.[xyz]|radius|rotationYDeg|axialTiltDeg|opacity|intensity|origin\.[xyz]|angleDeg|length)$/,
+      /^[a-zA-Z][a-zA-Z0-9]{0,39}\.(position\.[xyz]|radius|rotationYDeg|axialTiltDeg|opacity|intensity|origin\.[xyz]|angleDeg|length|apexAngleDeg)$/,
       "must look like <partId>.<property>, e.g. moon.position.x",
     ),
   op: z.enum(BINDING_OPS),
@@ -153,6 +154,20 @@ export const GroundPatchPartSchema = z.object({
   color: z.string().max(40).optional(),
 });
 
+export const ShadowConePartSchema = z.object({
+  ...PartBase,
+  type: z.literal("shadowCone"),
+  /** Cone base sits at the casting body; the apex points away from it. */
+  origin: vector3,
+  /** Direction in degrees in the XZ plane, 0 = +X (away from the Sun at origin). */
+  angleDeg: finite,
+  length: finite.positive(),
+  /** Full cone angle in degrees: base radius = tan(apexAngle/2) · length. */
+  apexAngleDeg: z.number().finite().positive().max(180),
+  color: z.string().max(40).optional(),
+  opacity: z.number().finite().min(0).max(1).optional(),
+});
+
 export const PartSchema = z.discriminatedUnion("type", [
   SpherePartSchema,
   LightSourcePartSchema,
@@ -160,6 +175,7 @@ export const PartSchema = z.discriminatedUnion("type", [
   ArrowPartSchema,
   LabelPartSchema,
   GroundPatchPartSchema,
+  ShadowConePartSchema,
 ]);
 
 /**

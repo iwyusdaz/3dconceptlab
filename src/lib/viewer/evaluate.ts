@@ -48,6 +48,7 @@ export type PartOverrides = {
   intensity?: number;
   angleDeg?: number;
   length?: number;
+  apexAngleDeg?: number;
 };
 
 /** Evaluate every binding in the spec against the current slider values. */
