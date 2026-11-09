@@ -1,5 +1,7 @@
 # ConceptLab
 
+**Live:** https://conceptlab-iwyusds-projects.vercel.app
+
 Type a concept, get an interactive 3D learning experience. ConceptLab is an AI-powered
 tool for teachers: you describe a concept that depends on spatial or moving
 relationships — *why seasons happen*, *why the Moon has phases* — and ConceptLab turns it
