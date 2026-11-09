@@ -19,15 +19,16 @@ The first version covers the Earth–Sun–Moon system, with common misconceptio
 - A teacher types a concept plus an access code on `/create`. DeepSeek (see the data note
   below) turns it into a **declarative scene spec** — never code.
 - **Hybrid generation:** DeepSeek first picks a hand-built template when one matches
-  (v1 has one: **Seasons**). Otherwise it composes a scene from a small library of parts
-  (sphere, light source, orbit path, arrow, label, ground patch) bound to sliders through
-  whitelisted operations, with readouts computed from real astronomy formulas.
+  (two templates: **Seasons** and **Eclipses**). Otherwise it composes a scene from a
+  small library of parts (sphere, light source, orbit path, arrow, label, ground patch,
+  shadow cone) bound to sliders through whitelisted operations, with readouts computed
+  from real astronomy formulas.
 - Concepts outside what the parts library can show get "This concept isn't supported yet"
   and nothing is generated.
 - The teacher previews, can edit every text field (re-validated), and saves — which
   creates a share link `/e/<shareId>`.
-- `/demo` shows both reference experiences (Seasons template, Moon phases composed) with
-  no setup, no AI calls and no storage.
+- `/demo` shows the three reference experiences (Seasons template, Moon phases composed,
+  Eclipses template) with no setup, no AI calls and no storage.
 
 ## Accuracy over spectacle
 
@@ -72,10 +73,11 @@ count as validation failures and trigger retries (max 2).
 `.env.example` ships with `FIXTURE_MODE=true`. On Vercel, Preview deployments run with
 `FIXTURE_MODE=true` and Production with `FIXTURE_MODE=false`.
 
-In Fixture mode, concept text containing "season" returns the Seasons fixture, text
-containing "moon" and "phase" returns the Moon phases fixture; anything else shows
-"Fixture mode: only the sample concepts are available". `/demo` always uses pre-made
-experiences bundled with the app and never reads or writes storage.
+In Fixture mode, concept text containing "eclipse" returns the Eclipses fixture, "season"
+returns the Seasons fixture, text containing "moon" and "phase" returns the Moon phases
+fixture; anything else shows "Fixture mode: only the sample concepts are available".
+`/demo` always uses pre-made experiences bundled with the app and never reads or writes
+storage.
 
 ## Storage
 
