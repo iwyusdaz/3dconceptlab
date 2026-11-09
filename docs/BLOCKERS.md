@@ -28,15 +28,15 @@ Status: **All owner actions resolved.** The project is live in production.
   but was deliberately disconnected later (see history below).
 - **Blob storage live checks ran** during Task 7 (contract tests against the
   real private store under a `test/` prefix, cleaned up afterwards).
-- **LIVE_AI_ACCESS_CODE** was generated during Task 1; on 2026-11-09 the
-  owner re-confirmed it. Note: it was printed to the terminal while
-  debugging env-file quoting — the owner may rotate it by editing
-  `.env.local` and re-running `vercel env add LIVE_AI_ACCESS_CODE
-  <value> production -y --force` (plus preview/development).
+- **LIVE_AI_ACCESS_CODE rotated (2026-11-09).** It had been printed to the
+  terminal while debugging env-file quoting. Replaced in `.env.local` and all
+  three Vercel environments (production/preview/development); production
+  redeployed and the new code verified live: wrong/missing code → 401, new
+  code accepted, unsupported-concept path returned with `callsUsed: 1`.
 
 ## History
 
 - Git auto-deploy to the production target was disconnected deliberately
   during the build (pushes to `main` were auto-deploying to Production,
-  which the plan forbids before owner approval). It can be re-enabled with
-  `vercel git connect` now that the owner has approved release.
+  which the plan forbids before owner approval). Re-enabled with
+  `vercel git connect` on 2026-11-09 after owner approval of release.
