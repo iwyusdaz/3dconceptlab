@@ -1,5 +1,6 @@
 import moonPhasesJson from "@/fixtures/moon-phases.json";
 import seasonsJson from "@/fixtures/seasons.json";
+import eclipsesJson from "@/fixtures/eclipses.json";
 import { validateSpec, type ValidationResult } from "@/lib/spec/validate";
 import type { SceneSpec } from "@/lib/spec/schema";
 
@@ -34,6 +35,7 @@ function loadFixture(json: FixtureFile, key: string): ExperienceFixture {
 export const FIXTURES: Record<string, ExperienceFixture> = {
   "moon-phases": loadFixture(moonPhasesJson, "moon-phases"),
   seasons: loadFixture(seasonsJson, "seasons"),
+  eclipses: loadFixture(eclipsesJson, "eclipses"),
 };
 
 export function getFixture(key: string): ExperienceFixture | undefined {

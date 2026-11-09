@@ -2,6 +2,7 @@
 
 import type { VariableValues } from "@/lib/viewer/evaluate";
 import SeasonsScene, { SeasonsGroundViewCanvas } from "./SeasonsScene";
+import EclipsesScene from "./EclipsesScene";
 
 /**
  * Template scene registry: maps a template ID to its hand-built React
@@ -24,6 +25,7 @@ export interface TemplateSceneEntry {
 
 const TEMPLATE_SCENES: Record<string, TemplateSceneEntry> = {
   seasons: { scene: SeasonsScene, inset: SeasonsGroundViewCanvas },
+  eclipses: { scene: EclipsesScene },
 };
 
 export function getTemplateScene(templateId: string): TemplateSceneEntry | undefined {

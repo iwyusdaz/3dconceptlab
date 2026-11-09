@@ -1,11 +1,44 @@
-import { test, expect } from "@playwright/test";
-import { setRange } from "./helpers";
+import { test, expect, type Page } from "@playwright/test";
 
 /**
- * Task 8: /demo works with no environment keys and makes no AI calls and no
- * storage calls. All links work.
+ * Task 8 + scope-growth round 1: /demo works with no environment keys and
+ * makes no AI calls and no storage calls. All links work.
  */
-test("demo page: both experiences render, no API calls at all", async ({ page }) => {
+
+/**
+ * Section-scoped setRange: the demo page repeats slider test ids across
+ * experiences, so the interaction must target one section's input and check
+ * that same input's DOM value.
+ */
+async function setRangeInSection(page: Page, sectionId: string, testId: string, value: number): Promise<void> {
+  const selector = `#${sectionId} [data-testid="${testId}"]`;
+  const locator = page.locator(selector);
+  await locator.waitFor({ state: "visible" });
+  const expected = String(value);
+  for (let attempt = 0; attempt < 6; attempt++) {
+    await locator.evaluate((el, v) => {
+      const input = el as HTMLInputElement;
+      const setter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value")!.set!;
+      setter.call(input, String(v));
+      input.dispatchEvent(new Event("input", { bubbles: true }));
+      input.dispatchEvent(new Event("change", { bubbles: true }));
+    }, value);
+    try {
+      await page.waitForFunction(
+        ({ sel, expected }) =>
+          (document.querySelector(sel) as HTMLInputElement | null)?.value === expected,
+        { sel: selector, expected },
+        { timeout: 1500, polling: 100 },
+      );
+      return;
+    } catch {
+      // Retry the dispatch.
+    }
+  }
+  throw new Error(`setRangeInSection: "${selector}" never accepted value ${expected}`);
+}
+
+test("demo page: all experiences render, no API calls at all", async ({ page }) => {
   const apiCalls: string[] = [];
   page.on("request", (req) => {
     const url = req.url();
@@ -15,15 +48,21 @@ test("demo page: both experiences render, no API calls at all", async ({ page })
 
   await expect(page.locator("#demo-seasons")).toContainText("Why Earth has seasons");
   await expect(page.locator("#demo-moon-phases")).toContainText("Why the Moon has phases");
+  await expect(page.locator("#demo-eclipses")).toContainText("Solar and lunar eclipses");
 
-  // Both scenes render canvases.
+  // The scenes render canvases.
   const canvases = page.locator(".demo-experience canvas");
   await expect(canvases.first()).toBeVisible();
 
-  // Interact with the moon-phases demo (the second one).
-  await expect(page.getByTestId("viewer-scene").first()).toHaveAttribute("data-hydrated", "true", { timeout: 20_000 });
-  await setRange(page, "slider-orbitAngle", 180);
-  await expect(page.getByTestId("readout-litFraction").last()).toContainText("1.00");
+  // Interact with the moon-phases demo, scoped to its section (the eclipses
+  // experience also has a slider-orbitAngle).
+  await expect(page.locator("#demo-moon-phases").getByTestId("viewer-scene")).toHaveAttribute(
+    "data-hydrated",
+    "true",
+    { timeout: 20_000 },
+  );
+  await setRangeInSection(page, "demo-moon-phases", "slider-orbitAngle", 180);
+  await expect(page.locator("#demo-moon-phases").getByTestId("readout-litFraction")).toContainText("1.00");
 
   // Zero API requests: no AI calls, no storage calls.
   expect(apiCalls, "no /api/* requests should be made on /demo").toHaveLength(0);

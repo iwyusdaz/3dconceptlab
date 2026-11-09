@@ -1,0 +1,33 @@
+{
+  "source": "hand-written",
+  "name": "eclipses",
+  "description": "Reference template experience: solar and lunar eclipses need node alignment.",
+  "spec": {
+    "mode": "template",
+    "templateId": "eclipses",
+    "variables": [
+      { "id": "orbitAngle", "label": "Moon's position in its orbit", "min": 0, "max": 360, "step": 1, "default": 0, "unit": "°", "bindings": [] },
+      { "id": "inclination", "label": "Moon's orbital tilt", "min": 0, "max": 10, "step": 0.1, "default": 5.1, "unit": "°", "bindings": [] },
+      { "id": "moonDistance", "label": "Earth-Moon distance", "min": 356000, "max": 406000, "step": 100, "default": 384400, "unit": "km", "bindings": [] }
+    ],
+    "readouts": [
+      { "id": "eclipticLat", "label": "Moon's height above the ecliptic", "formula": "moonEclipticLatitude", "inputs": { "orbitAngle": "$orbitAngle", "inclination": "$inclination" } },
+      { "id": "moonAngularSize", "label": "Moon's apparent size", "formula": "angularSize", "inputs": { "diameterKm": 3475, "distanceKm": "$moonDistance" } },
+      { "id": "sunAngularSize", "label": "Sun's apparent size", "formula": "angularSize", "inputs": { "diameterKm": 1391000, "distanceKm": 149600000 } },
+      { "id": "sizeRatio", "label": "Moon vs Sun apparent size", "formula": "angularSizeRatio", "inputs": { "moonDiameterKm": 3475, "moonDistanceKm": "$moonDistance", "sunDiameterKm": 1391000, "sunDistanceKm": 149600000 } }
+    ],
+    "content": {
+      "title": "Solar and lunar eclipses",
+      "explanation": "The Moon's orbit is tilted about 5.1° relative to the plane of Earth's orbit (the ecliptic). Most months, the new moon's shadow passes above or below Earth and the full moon slips above or below Earth's shadow. An eclipse happens only when new or full moon coincides with a node - one of the two points where the Moon's orbit crosses the ecliptic. Watch the Moon's height above the ecliptic as you scrub the orbit: at the nodes it is zero, and that is exactly where eclipses become possible.",
+      "tryThis": [
+        "Scrub the Moon's position away from 0°. How quickly does its shadow stop hitting Earth?",
+        "Set the Moon's orbital tilt to 0°. Now every new moon is a solar eclipse and every full moon is a lunar eclipse - with the real 5.1° tilt they usually miss.",
+        "Move the Earth-Moon distance out to 406,000 km (apogee). The Moon's apparent size drops below the Sun's - a solar eclipse there would be annular, not total.",
+        "Compare the Moon's and the Sun's apparent sizes in the readouts. At which distances is a total solar eclipse possible?"
+      ],
+      "keyIdea": "Eclipses do not happen every month: the Moon's orbit is tilted about 5.1°, so new and full moons usually miss the nodes where Earth's and the Moon's shadows line up.",
+      "notToScale": true,
+      "timeLapse": true
+    }
+  }
+}

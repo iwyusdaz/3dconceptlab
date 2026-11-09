@@ -193,6 +193,10 @@ export async function generateExperience(
 /** Fixture routing per the Modes section of the plan. */
 export function fixtureResult(concept: string): GenerateResult {
   const lower = concept.toLowerCase();
+  if (lower.includes("eclipse")) {
+    const f = getFixture("eclipses")!;
+    return { status: "success", spec: f.spec, source: f.source, callsUsed: 0 };
+  }
   if (lower.includes("season")) {
     const f = getFixture("seasons")!;
     return { status: "success", spec: f.spec, source: f.source, callsUsed: 0 };

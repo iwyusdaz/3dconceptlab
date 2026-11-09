@@ -6,7 +6,7 @@ import { ExperienceViewer } from "@/components/viewer/ExperienceViewer";
 export const metadata: Metadata = {
   title: "Demo experiences — 3D ConceptLab",
   description:
-    "Explore two example 3D experiences — why Earth has seasons and why the Moon has phases — with no setup and no AI cost.",
+    "Explore three example 3D experiences — why Earth has seasons, why the Moon has phases, and solar and lunar eclipses — with no setup and no AI cost.",
 };
 
 /**
@@ -19,14 +19,14 @@ export default function DemoPage() {
     <main className="demo">
       <h1>Demo experiences</h1>
       <p>
-        Two complete examples bundled with 3D ConceptLab. Nothing is generated, nothing is
+        Complete examples bundled with 3D ConceptLab. Nothing is generated, nothing is
         stored — just explore.
       </p>
       {keys.map((key) => {
         const fixture = FIXTURES[key];
         return (
-          <section key={key} className="demo-experience" aria-labelledby={`demo-${key}`}>
-            <h2 id={`demo-${key}`}>{fixture.spec.content.title}</h2>
+          <section key={key} className="demo-experience" id={`demo-${key}`} aria-labelledby={`demo-${key}-title`}>
+            <h2 id={`demo-${key}-title`}>{fixture.spec.content.title}</h2>
             <ExperienceViewer spec={fixture.spec} ariaLabel={`Demo experience: ${key}`} />
           </section>
         );
