@@ -96,7 +96,8 @@ export const SpherePartSchema = z.object({
   type: z.literal("sphere"),
   position: vector3,
   radius: finite.positive(),
-  color: z.string().max(40),
+  /** Optional; renderer default per part type when omitted. */
+  color: z.string().max(40).optional(),
   /** Texture key; currently "earth-blue-marble" (Task 5). */
   texture: z.enum(["none", "earth-blue-marble"]).optional(),
   axialTiltDeg: finite.optional(),
@@ -112,16 +113,17 @@ export const LightSourcePartSchema = z.object({
   type: z.literal("lightSource"),
   position: vector3,
   intensity: z.number().finite().positive().max(100),
-  color: z.string().max(40),
+  color: z.string().max(40).optional(),
   radius: finite.positive().optional(),
 });
 
 export const OrbitPathPartSchema = z.object({
   ...PartBase,
   type: z.literal("orbitPath"),
-  center: vector3,
+  /** Optional; defaults to the origin (Earth) when omitted. */
+  center: vector3.optional(),
   radius: finite.positive(),
-  color: z.string().max(40),
+  color: z.string().max(40).optional(),
 });
 
 export const ArrowPartSchema = z.object({
@@ -131,7 +133,7 @@ export const ArrowPartSchema = z.object({
   /** Direction angle in degrees in the XZ plane, 0 = +X. */
   angleDeg: finite,
   length: finite.positive(),
-  color: z.string().max(40),
+  color: z.string().max(40).optional(),
 });
 
 export const LabelPartSchema = z.object({
@@ -148,7 +150,7 @@ export const GroundPatchPartSchema = z.object({
   type: z.literal("groundPatch"),
   position: vector3,
   radius: finite.positive(),
-  color: z.string().max(40),
+  color: z.string().max(40).optional(),
 });
 
 export const PartSchema = z.discriminatedUnion("type", [

@@ -138,6 +138,7 @@ export async function generateExperience(
       const parsed = parseJSONReply(reply.content);
       if (!parsed.ok) {
         lastErrors = [parsed.error];
+        console.warn(`[generate] template fill attempt ${attempt + 1} rejected: ${parsed.error}`);
         continue;
       }
       const merged = mergeTemplateFill(template.id, parsed.json);
@@ -151,6 +152,9 @@ export async function generateExperience(
         };
       }
       lastErrors = result.errors;
+      console.warn(
+        `[generate] template fill attempt ${attempt + 1} failed validation: ${result.errors.join(" | ")}`,
+      );
     }
     return failure(MESSAGES.buildFailed);
   }
@@ -159,13 +163,14 @@ export async function generateExperience(
   let lastErrors: string[] = [];
   for (let attempt = 0; attempt <= LIMITS.GENERATION_RETRIES; attempt++) {
     const user = composeUserPrompt(concept) + (attempt > 0 ? retryNote(lastErrors) : "");
-    const reply = await callOnce(composeSystemPrompt(), user, 4000);
+    const reply = await callOnce(composeSystemPrompt(), user, 6000);
     if (!reply.ok) {
       return reply.error === "__cap__" ? failure(MESSAGES.capReached) : failure(MESSAGES.buildFailed);
     }
     const parsed = parseJSONReply(reply.content);
     if (!parsed.ok) {
       lastErrors = [parsed.error];
+      console.warn(`[generate] compose attempt ${attempt + 1} rejected: ${parsed.error}`);
       continue;
     }
     const result = validateSpec(parsed.json);
@@ -178,6 +183,9 @@ export async function generateExperience(
       };
     }
     lastErrors = result.errors;
+    console.warn(
+      `[generate] compose attempt ${attempt + 1} failed validation: ${result.errors.join(" | ")}`,
+    );
   }
   return failure(MESSAGES.buildFailed);
 }

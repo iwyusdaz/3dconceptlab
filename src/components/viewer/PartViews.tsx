@@ -55,6 +55,20 @@ function vec3(
 
 const D2R = Math.PI / 180;
 
+/** Renderer defaults when a spec omits the (optional) color field. */
+const DEFAULT_COLORS: Record<ScenePart["type"], string> = {
+  sphere: "#8fa8cc",
+  lightSource: "#fff4d6",
+  orbitPath: "#5a6b8c",
+  arrow: "#ffd76e",
+  label: "#dfe6f5",
+  groundPatch: "#2e4d3a",
+};
+
+function partColor(p: ScenePart): string {
+  return (p as { color?: string }).color ?? DEFAULT_COLORS[p.type];
+}
+
 function SpherePartView({ part, overrides }: PartViewProps) {
   const p = part as Extract<ScenePart, { type: "sphere" }>;
   const position = vec3(part, overrides, "position", [0, 0, 0]);
@@ -66,7 +80,7 @@ function SpherePartView({ part, overrides }: PartViewProps) {
     <mesh position={position} rotation={[0, rotationYDeg * D2R, tilt * D2R]}>
       <sphereGeometry args={[radius, 48, 48]} />
       <meshStandardMaterial
-        color={p.color}
+        color={partColor(p)}
         roughness={0.8}
         metalness={0.05}
         transparent={opacity < 1}
@@ -86,9 +100,9 @@ function LightSourcePartView({ part, overrides }: PartViewProps) {
       {/* Visible sun disc: unlit material (self-luminous). */}
       <mesh>
         <sphereGeometry args={[radius, 32, 32]} />
-        <meshBasicMaterial color={p.color} />
+        <meshBasicMaterial color={partColor(p)} />
       </mesh>
-      <pointLight intensity={intensity * 40} decay={0} color={p.color} />
+      <pointLight intensity={intensity * 40} decay={0} color={partColor(p)} />
     </group>
   );
 }
@@ -103,7 +117,7 @@ function OrbitPathView({ part, overrides }: PartViewProps) {
   return (
     <mesh position={center} rotation={[-Math.PI / 2, 0, 0]}>
       <torusGeometry args={[radius, 0.015, 8, 128]} />
-      <meshBasicMaterial color={p.color} transparent opacity={0.6} />
+      <meshBasicMaterial color={partColor(p)} transparent opacity={0.6} />
     </mesh>
   );
 }
@@ -122,14 +136,14 @@ function ArrowPartView({ part, overrides }: PartViewProps) {
         rotation={[0, -angleDeg * D2R, Math.PI / 2]}
       >
         <cylinderGeometry args={[0.03, 0.03, length * 0.9, 8]} />
-        <meshBasicMaterial color={p.color} />
+        <meshBasicMaterial color={partColor(p)} />
       </mesh>
       <mesh
         position={[dir[0] * length * 0.95, 0, dir[2] * length * 0.95]}
         rotation={[0, -angleDeg * D2R, Math.PI / 2]}
       >
         <coneGeometry args={[0.08, 0.25, 8]} />
-        <meshBasicMaterial color={p.color} />
+        <meshBasicMaterial color={partColor(p)} />
       </mesh>
     </group>
   );
@@ -159,7 +173,7 @@ function GroundPatchView({ part }: PartViewProps) {
   return (
     <mesh position={p.position} rotation={[-Math.PI / 2, 0, 0]}>
       <circleGeometry args={[p.radius, 32]} />
-      <meshStandardMaterial color={p.color} roughness={1} side={THREE.DoubleSide} />
+      <meshStandardMaterial color={partColor(p)} roughness={1} side={THREE.DoubleSide} />
     </mesh>
   );
 }
