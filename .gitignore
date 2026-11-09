@@ -39,3 +39,9 @@ yarn-error.log*
 .idea
 .vscode
 .env*
+
+# tool-internal state
+/.mimosa/
+/.zcode/
+/.v2c/
+/.video_agent/
