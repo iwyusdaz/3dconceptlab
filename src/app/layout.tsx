@@ -3,7 +3,7 @@ import { getServerStatus } from "@/config/app-config";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "ConceptLab",
+  title: "3D ConceptLab",
   description:
     "Type a concept, get an interactive 3D learning experience. Built for teachers and students.",
 };

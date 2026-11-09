@@ -10,7 +10,7 @@ export default function NotFound() {
         <Link href="/demo">demo experiences</Link>.
       </p>
       <p>
-        <Link href="/">Back to the ConceptLab home page</Link>
+        <Link href="/">Back to the 3D ConceptLab home page</Link>
       </p>
     </main>
   );

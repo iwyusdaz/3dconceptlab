@@ -1,10 +1,10 @@
-# ConceptLab
+# 3D ConceptLab
 
 **Live:** https://3dconceptlab.vercel.app
 
-Type a concept, get an interactive 3D learning experience. ConceptLab is an AI-powered
+Type a concept, get an interactive 3D learning experience. 3D ConceptLab is an AI-powered
 tool for teachers: you describe a concept that depends on spatial or moving
-relationships — *why seasons happen*, *why the Moon has phases* — and ConceptLab turns it
+relationships — *why seasons happen*, *why the Moon has phases* — and 3D ConceptLab turns it
 into an interactive Three.js scene students can explore from a share link, with no
 accounts and nothing collected from students.
 

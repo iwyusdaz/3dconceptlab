@@ -1,4 +1,4 @@
-# ConceptLab — owner review contact sheet (Task 9 Part A)
+# 3D ConceptLab — owner review contact sheet (Task 9 Part A)
 
 Generated 2026-11-09. Screenshots taken from the production build
 (`next build` + `next start`), fixture mode, Chromium at 1280×900.

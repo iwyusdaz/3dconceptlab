@@ -41,5 +41,5 @@ test("demo page: all links resolve", async ({ page }) => {
   await page.goto("/create");
   await expect(page.getByRole("heading", { name: "Create an experience" })).toBeVisible();
   await page.goto("/");
-  await expect(page.getByRole("heading", { level: 1, name: "ConceptLab" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: "3D ConceptLab" })).toBeVisible();
 });

@@ -7,7 +7,7 @@ import { test, expect } from "@playwright/test";
  */
 test("home page loads with hero, canvas and mode badge", async ({ page }) => {
   await page.goto("/");
-  await expect(page.getByRole("heading", { level: 1, name: "ConceptLab" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: "3D ConceptLab" })).toBeVisible();
   await expect(page.locator("#mode-badge")).toHaveAttribute("data-mode", "fixture");
   await expect(page.getByRole("link", { name: "Try the demo" })).toBeVisible();
   await expect(page.getByRole("link", { name: "Create an experience" })).toBeVisible();

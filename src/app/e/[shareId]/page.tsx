@@ -5,7 +5,7 @@ import { isValidShareId } from "@/lib/storage/types";
 import { ExperienceViewer } from "@/components/viewer/ExperienceViewer";
 
 export const metadata: Metadata = {
-  title: "Shared experience — ConceptLab",
+  title: "Shared experience — 3D ConceptLab",
 };
 
 export const dynamic = "force-dynamic";

@@ -5,13 +5,13 @@ export default function Home() {
   return (
     <main className="landing">
       <section className="hero">
-        <h1>ConceptLab</h1>
+        <h1>3D ConceptLab</h1>
         <p className="tagline">
           Type a concept. Get an interactive 3D learning experience your students can explore.
         </p>
         <p className="tagline-sub">
           Some concepts depend on spatial or moving relationships — why seasons happen, why
-          the Moon has phases. Words and static diagrams struggle with those. ConceptLab
+          the Moon has phases. Words and static diagrams struggle with those. 3D ConceptLab
           turns them into 3D scenes students can scrub, tilt and explore.
         </p>
         <div className="hero-actions">

@@ -4,7 +4,7 @@ import { FIXTURES } from "@/fixtures";
 import { ExperienceViewer } from "@/components/viewer/ExperienceViewer";
 
 export const metadata: Metadata = {
-  title: "Demo experiences — ConceptLab",
+  title: "Demo experiences — 3D ConceptLab",
   description:
     "Explore two example 3D experiences — why Earth has seasons and why the Moon has phases — with no setup and no AI cost.",
 };
@@ -19,7 +19,7 @@ export default function DemoPage() {
     <main className="demo">
       <h1>Demo experiences</h1>
       <p>
-        Two complete examples bundled with ConceptLab. Nothing is generated, nothing is
+        Two complete examples bundled with 3D ConceptLab. Nothing is generated, nothing is
         stored — just explore.
       </p>
       {keys.map((key) => {

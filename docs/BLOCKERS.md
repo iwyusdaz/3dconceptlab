@@ -1,4 +1,4 @@
-# ConceptLab – Blockers and owner actions
+# 3D ConceptLab – Blockers and owner actions
 
 Status: **All owner actions resolved.** The project is live in production.
 
