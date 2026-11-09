@@ -78,6 +78,35 @@ export function illuminatedFraction(elongation: number): number {
   return (1 - cosDeg(elongation)) / 2;
 }
 
+/**
+ * How far the Moon is above (+) or below (−) the ecliptic plane at its
+ * current orbital position, for an orbit inclined by `inclination` degrees.
+ * Measured from the ascending node: latitude = asin(sin i · sin θ). Zero at
+ * the nodes (eclipse seasons), maximum ±inclination at ±90°.
+ */
+export function moonEclipticLatitude(orbitAngle: number, inclination: number): number {
+  const lat = Math.asin(sinDeg(inclination) * sinDeg(orbitAngle));
+  return lat / DEG;
+}
+
+/** Apparent angular diameter of a body in degrees: 2·atan(d / 2D). */
+export function angularSize(diameterKm: number, distanceKm: number): number {
+  if (distanceKm <= 0) return Number.POSITIVE_INFINITY;
+  return 2 * Math.atan(diameterKm / (2 * distanceKm)) / DEG;
+}
+
+/** The Moon's angular size divided by the Sun's: >1 total, <1 annular. */
+export function angularSizeRatio(
+  moonDiameterKm: number,
+  moonDistanceKm: number,
+  sunDiameterKm: number,
+  sunDistanceKm: number,
+): number {
+  const sun = angularSize(sunDiameterKm, sunDistanceKm);
+  if (!Number.isFinite(sun) || sun === 0) return Number.POSITIVE_INFINITY;
+  return angularSize(moonDiameterKm, moonDistanceKm) / sun;
+}
+
 /** Registry name → implementation, used by the readout evaluator. */
 export const FORMULA_FNS: Record<string, (...args: number[]) => number> = {
   solarDeclination,
@@ -87,6 +116,9 @@ export const FORMULA_FNS: Record<string, (...args: number[]) => number> = {
   earthSunDistance,
   moonElongation,
   illuminatedFraction,
+  moonEclipticLatitude,
+  angularSize,
+  angularSizeRatio,
 };
 
 /** Input order per formula name, matching the registry definitions. */
@@ -98,6 +130,9 @@ const FORMULA_ARG_ORDER: Record<string, string[]> = {
   earthSunDistance: ["dayOfYear"],
   moonElongation: ["orbitAngle"],
   illuminatedFraction: ["elongation"],
+  moonEclipticLatitude: ["orbitAngle", "inclination"],
+  angularSize: ["diameterKm", "distanceKm"],
+  angularSizeRatio: ["moonDiameterKm", "moonDistanceKm", "sunDiameterKm", "sunDistanceKm"],
 };
 
 export interface FormulaSample {
@@ -117,6 +152,9 @@ export function samples(): FormulaSample[] {
     earthSunDistance: "million km",
     moonElongation: "°",
     illuminatedFraction: "fraction",
+    moonEclipticLatitude: "°",
+    angularSize: "°",
+    angularSizeRatio: "×",
   };
   const results: FormulaSample[] = [];
   for (const [name, fn] of Object.entries(FORMULA_FNS)) {
@@ -130,6 +168,9 @@ export function samples(): FormulaSample[] {
       earthSunDistance: { dayOfYear: 3 },
       moonElongation: { orbitAngle: 90 },
       illuminatedFraction: { elongation: 180 },
+      moonEclipticLatitude: { orbitAngle: 90, inclination: 5.1 },
+      angularSize: { diameterKm: 3475, distanceKm: 384400 },
+      angularSizeRatio: { moonDiameterKm: 3475, moonDistanceKm: 384400, sunDiameterKm: 1391000, sunDistanceKm: 149600000 },
     };
     const inputValues = examples[name];
     const args = argOrder.map((k) => inputValues[k]);

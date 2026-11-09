@@ -96,6 +96,41 @@ export const FORMULA_LIBRARY: FormulaDef[] = [
     outputUnit: "fraction",
     example: { elongation: 180 },
   },
+  {
+    name: "moonEclipticLatitude",
+    description:
+      "How far the Moon sits above or below the ecliptic plane at its current orbital position, given the tilt of its orbit. Max at ±90° from the node line, 0° at the nodes — which is why eclipses only happen near eclipse seasons, not every month.",
+    inputs: [
+      { name: "orbitAngle", unit: "°", description: "The Moon's orbital position around Earth, measured from a node" },
+      { name: "inclination", unit: "°", description: "The tilt of the Moon's orbit relative to the ecliptic (real value ≈ 5.1°)" },
+    ],
+    outputUnit: "°",
+    example: { orbitAngle: 90, inclination: 5.1 },
+  },
+  {
+    name: "angularSize",
+    description:
+      "The apparent angular diameter of a body seen from a distance: 2·atan(diameter / (2·distance)). Compare the Sun's and Moon's apparent sizes to explain total vs annular eclipses.",
+    inputs: [
+      { name: "diameterKm", unit: "km", description: "The body's physical diameter" },
+      { name: "distanceKm", unit: "km", description: "Distance from the observer to the body" },
+    ],
+    outputUnit: "°",
+    example: { diameterKm: 3475, distanceKm: 384400 },
+  },
+  {
+    name: "angularSizeRatio",
+    description:
+      "The Moon's angular size divided by the Sun's. Above 1 the Moon fully covers the Sun (total eclipse possible); below 1 it cannot (annular eclipse).",
+    inputs: [
+      { name: "moonDiameterKm", unit: "km", description: "The Moon's diameter (≈3475)" },
+      { name: "moonDistanceKm", unit: "km", description: "Earth-Moon distance" },
+      { name: "sunDiameterKm", unit: "km", description: "The Sun's diameter (≈1,391,000)" },
+      { name: "sunDistanceKm", unit: "km", description: "Earth-Sun distance" },
+    ],
+    outputUnit: "×",
+    example: { moonDiameterKm: 3475, moonDistanceKm: 384400, sunDiameterKm: 1391000, sunDistanceKm: 149600000 },
+  },
 ];
 
 export const FORMULA_NAMES = FORMULA_LIBRARY.map((f) => f.name);

@@ -7,6 +7,9 @@ import {
   earthSunDistance,
   moonElongation,
   illuminatedFraction,
+  moonEclipticLatitude,
+  angularSize,
+  angularSizeRatio,
 } from "./index";
 
 describe("solarDeclination", () => {
@@ -109,5 +112,56 @@ describe("illuminatedFraction", () => {
     expect(illuminatedFraction(90)).toBeCloseTo(0.5, 10);
     expect(illuminatedFraction(270)).toBeCloseTo(0.5, 10);
     expect(illuminatedFraction(180)).toBeCloseTo(1, 10);
+  });
+});
+
+describe("moonEclipticLatitude", () => {
+  it("is 0 at the nodes (0° and 180°) where eclipses can happen", () => {
+    expect(moonEclipticLatitude(0, 5.1)).toBeCloseTo(0, 10);
+    expect(moonEclipticLatitude(180, 5.1)).toBeCloseTo(0, 10);
+  });
+
+  it("peaks at ±inclination at ±90° from the node line", () => {
+    expect(moonEclipticLatitude(90, 5.1)).toBeCloseTo(5.1, 6);
+    expect(moonEclipticLatitude(270, 5.1)).toBeCloseTo(-5.1, 6);
+  });
+
+  it("is 0 everywhere with inclination 0 — alignment every month", () => {
+    for (const angle of [0, 45, 90, 135, 180, 225, 270, 315]) {
+      expect(moonEclipticLatitude(angle, 0)).toBeCloseTo(0, 10);
+    }
+  });
+});
+
+describe("angularSize", () => {
+  it("Moon at average distance is about 0.52°", () => {
+    const size = angularSize(3475, 384400);
+    expect(size).toBeGreaterThan(0.5);
+    expect(size).toBeLessThan(0.55);
+  });
+
+  it("Sun at average distance is about 0.53°", () => {
+    const size = angularSize(1391000, 149600000);
+    expect(size).toBeGreaterThan(0.5);
+    expect(size).toBeLessThan(0.56);
+  });
+
+  it("halves when the distance doubles", () => {
+    expect(angularSize(3475, 768800)).toBeCloseTo(angularSize(3475, 384400) / 2, 3);
+  });
+});
+
+describe("angularSizeRatio", () => {
+  it("is just below 1 at average distances — total eclipse barely possible", () => {
+    const ratio = angularSizeRatio(3475, 384400, 1391000, 149600000);
+    expect(ratio).toBeGreaterThan(0.9);
+    expect(ratio).toBeLessThan(1.05);
+  });
+
+  it("is above 1 at perigee (total) and below 1 at apogee (annular)", () => {
+    const perigee = angularSizeRatio(3475, 356500, 1391000, 149600000);
+    const apogee = angularSizeRatio(3475, 406700, 1391000, 149600000);
+    expect(perigee).toBeGreaterThan(1);
+    expect(apogee).toBeLessThan(1);
   });
 });
